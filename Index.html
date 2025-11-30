@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FuckyouHand</title>
+    <style>
+    :root {
+      --bg: #0f172a;
+      --card: #0b1220;
+      --accent: #ff6b6b;
+      --muted: #94a3b8;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, #071029 0%, #0f172a 100%);
+      color:#e6eef8;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+    .card{
+      width:100%;
+      max-width:620px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:12px;
+      padding:24px;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+      border:1px solid rgba(255,255,255,0.03);
+    }
+    h1{margin:0 0 8px;font-size:20px}
+    p.lead{margin:0 0 16px;color:var(--muted)}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+    input[type="text"]{
+      flex:1;
+      padding:10px 12px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.02);
+      color:inherit;
+      font-size:16px;
+    }
+    button{
+      appearance:none;
+      border:0;
+      padding:10px 14px;
+      border-radius:8px;
+      font-weight:600;
+      cursor:pointer;
+    }
+    .btn-primary{ background: linear-gradient(90deg,#ff7a7a,#ff5656); color:#08101a; }
+    .btn-neutral{ background: rgba(255,255,255,0.03); color:var(--muted); border:1px solid rgba(255,255,255,0.02); }
+
+    .output{
+      margin-top:12px;
+      padding:20px;
+      border-radius:10px;
+      background: rgba(0,0,0,0.25);
+      min-height:120px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:40px;
+      text-align:center;
+      word-break:break-word;
+    }
+
+    .note { margin-top:12px; color:var(--muted); font-size:13px }
+    </style>
+</head>
+<body>
+    <div class="card" role="main">
+    <h1>Ngón giữa — Demo HTML/JS</h1>
+    <p class="lead">Nhập thông điệp muốn hiển thị (mặc định là emoji ngón giữa). Nhấn <strong>Hiện</strong> để xuất ra.</p>
+
+    <div class="controls">
+      <input id="msg" type="text" value="🖕 Xin chào! (dùng có trách nhiệm)" aria-label="Thông điệp" />
+      <button id="showBtn" class="btn-primary">Hiện</button>
+      <button id="clearBtn" class="btn-neutral">Xóa</button>
+    </div>
+
+    <div id="out" class="output" aria-live="polite">
+      <!-- Kết quả hiển thị ở đây -->
+    </div>
+
+    <div class="note">
+      ⚠️ Lưu ý: đừng dùng để xúc phạm người khác. Muốn biểu thị thiếu lịch sự theo kiểu hài hước thì dùng emoji thay cho lời lẽ.
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const showBtn = document.getElementById('showBtn');
+      const clearBtn = document.getElementById('clearBtn');
+      const out = document.getElementById('out');
+      const input = document.getElementById('msg');
+
+      // Hiển thị thông điệp (có animation nhẹ)
+      showBtn.addEventListener('click', () => {
+        const txt = input.value.trim();
+        if (!txt) {
+          out.textContent = "…";
+          return;
+        }
+        // Nếu chuỗi quá dài, rút gọn hiển thị và cho phép cuộn
+        out.style.fontSize = txt.length > 30 ? '28px' : '40px';
+        out.textContent = txt;
+        // bật hiệu ứng nhỏ
+        out.animate([
+          { transform: 'scale(0.9)', opacity: 0.6 },
+          { transform: 'scale(1.03)', opacity: 1 },
+          { transform: 'scale(1)', opacity: 1 }
+        ], { duration: 300, easing: 'cubic-bezier(.2,.8,.2,1)' });
+      });
+
+      clearBtn.addEventListener('click', () => {
+        out.textContent = '';
+        input.value = '';
+      });
+
+      // Phím Enter cũng kích hoạt
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') showBtn.click();
+      });
+    })();
+  </script>
+</body>
+</html>
